@@ -155,7 +155,9 @@ body {
 ;(function () {
     'use strict';
 
+    var SELF_URL = '';
     var PARSERS = [
+        { name: '自建',       url: '__SELF__' },
         { name: '默认A',      url: 'https://json.fongmi.cc/web?url=' },
         { name: '虾米解析',   url: 'https://jx.xmflv.com/?url=' },
         { name: '冰豆解析',   url: 'https://bd.jx.cn/?url=' },
@@ -314,6 +316,51 @@ body {
         if (timer) { clearTimeout(timer); timer = null; }
         while (playerEl.firstChild) playerEl.removeChild(playerEl.firstChild);
 
+        // 自建解析：调用本地后端提取真实视频地址
+        if (parser.url === '__SELF__') {
+            if (!SELF_URL) {
+                setStatus('后端未连接，请先启动 python3 backend/server.py', true);
+                loadNext();
+                return;
+            }
+            setStatus('自建解析 提取中…', false);
+            var t0 = Date.now();
+            fetch(SELF_URL + '/extract?url=' + encodeURIComponent(activeUrl))
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    var elapsed = ((Date.now() - t0) / 1000).toFixed(1);
+                    if (data.ok) {
+                        Health.record(parser.url, true);
+                        setStatus('自建解析 ' + elapsed + 's', false);
+                        var video = document.createElement('video');
+                        video.src = data.url;
+                        video.controls = true;
+                        video.autoplay = true;
+                        video.playsInline = true;
+                        video.style.cssText = 'width:100%;height:100%;outline:none;';
+                        video.addEventListener('error', function () {
+                            Health.record(parser.url, false);
+                            setStatus('视频加载失败，换下一个', true);
+                            loadNext();
+                        });
+                        playerEl.appendChild(video);
+                    } else {
+                        Health.record(parser.url, false);
+                        setStatus('自建解析 未提取到视频', true);
+                        loadNext();
+                    }
+                })
+                .catch(function () {
+                    Health.record(parser.url, false);
+                    setStatus('后端请求失败', true);
+                    loadNext();
+                });
+            activeIdx = parser.idx;
+            renderChips();
+            return;
+        }
+
+        // 第三方解析器：iframe 模式
         var iframe = document.createElement('iframe');
         iframe.src = parser.url + activeUrl;
         iframe.allow = 'autoplay; encrypted-media; fullscreen';
@@ -377,6 +424,36 @@ body {
     renderChips();
     renderMore();
     urlEl.focus();
+
+    // 检测自建后端
+    (function detectBackend() {
+        var candidates = [];
+        if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+            candidates.push('http://localhost:8700');
+        }
+        candidates.push('http://' + location.hostname + ':8700');
+        // 如果是 GitHub Pages，也尝试 localhost（仅供本机开发用）
+        if (location.hostname !== 'localhost') {
+            candidates.push('http://localhost:8700');
+        }
+
+        function tryNext(i) {
+            if (i >= candidates.length) return;
+            var ctrl = new AbortController();
+            var timer = setTimeout(function () { ctrl.abort(); tryNext(i + 1); }, 2000);
+            fetch(candidates[i] + '/health', { signal: ctrl.signal })
+                .then(function (r) { return r.json(); })
+                .then(function (d) {
+                    clearTimeout(timer);
+                    if (d && d.status === 'ok') {
+                        SELF_URL = candidates[i];
+                        setStatus('自建后端已连接', false);
+                    }
+                })
+                .catch(function () { clearTimeout(timer); tryNext(i + 1); });
+        }
+        tryNext(0);
+    })();
 
     var p = new URLSearchParams(window.location.search).get('url');
     if (p) { urlEl.value = p; goEl.click(); }
