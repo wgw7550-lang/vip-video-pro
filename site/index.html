@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>VIP视频破解 Pro</title>
+<style>
+/* ── Design Tokens ────────────────────────── */
+:root {
+    --bg-primary: #0b1120;
+    --bg-secondary: #111827;
+    --bg-tertiary: #1e293b;
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --accent: #7c3aed;
+    --accent-hover: #8b5cf6;
+    --success: #16a34a;
+    --danger: #dc2626;
+    --warning: #f59e0b;
+    --border: #1e293b;
+    --radius: 14px;
+    --safe-bottom: env(safe-area-inset-bottom, 12px);
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+}
+
+/* ── Reset ────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body {
+    font-family: var(--font);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Header ───────────────────────────────── */
+.header {
+    padding: 14px 16px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+    flex-shrink: 0;
+}
+.header h1 {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    background: linear-gradient(135deg, #a78bfa, #7c3aed, #f59e0b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.header .subtitle {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+/* ── URL Input ────────────────────────────── */
+.url-bar {
+    padding: 12px 16px;
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+.url-input {
+    flex: 1;
+    padding: 11px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-family: var(--font);
+    outline: none;
+    transition: border-color 0.2s;
+    min-width: 0;
+}
+.url-input:focus { border-color: var(--accent); }
+.url-input::placeholder { color: #475569; }
+
+.btn {
+    padding: 11px 18px;
+    border-radius: 12px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+    font-family: var(--font);
+}
+.btn:active { transform: scale(0.96); }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+}
+.btn-outline:hover { border-color: #475569; color: var(--text-primary); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.btn-paste {
+    padding: 11px 14px;
+    font-size: 16px;
+}
+
+/* ── Status ───────────────────────────────── */
+.status-bar {
+    padding: 0 16px;
+    flex-shrink: 0;
+}
+.status-msg {
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    display: none;
+}
+.status-msg.show { display: block; }
+.status-msg.info { background: rgba(59,130,246,0.15); color: #93c5fd; }
+.status-msg.error { background: rgba(220,38,38,0.15); color: #fca5a5; }
+.status-msg.success { background: rgba(22,163,74,0.15); color: #86efac; }
+
+/* ── Parser Grid ──────────────────────────── */
+.parser-section {
+    padding: 10px 16px;
+    flex-shrink: 0;
+}
+.parser-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.parser-section-title {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.auto-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    user-select: none;
+}
+.auto-toggle .dot {
+    width: 36px; height: 20px;
+    border-radius: 10px;
+    background: var(--bg-tertiary);
+    position: relative;
+    transition: background 0.2s;
+}
+.auto-toggle .dot::after {
+    content: '';
+    position: absolute;
+    top: 2px; left: 2px;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: #64748b;
+    transition: all 0.2s;
+}
+.auto-toggle.active .dot { background: var(--success); }
+.auto-toggle.active .dot::after { left: 18px; background: #fff; }
+
+.parser-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 7px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 2px 0;
+}
+.parser-btn {
+    padding: 10px 6px;
+    text-align: center;
+    font-size: 12px;
+    color: #cbd5e1;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+.parser-btn:active { background: #334155; border-color: #6366f1; }
+.parser-btn.selected { background: #1e1b4b; border-color: #818cf8; color: #e0e7ff; }
+.parser-btn .parser-score {
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 6px;
+}
+.parser-btn .parser-score.high { color: #86efac; }
+.parser-btn .parser-score.mid { color: #fcd34d; }
+.parser-btn .parser-score.low { color: #fca5a5; }
+
+/* ── Player Area ──────────────────────────── */
+.player-container {
+    flex: 1;
+    margin: 8px 16px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: #000;
+    position: relative;
+    min-height: 200px;
+    border: 1px solid var(--border);
+}
+.player-container.empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.player-placeholder {
+    text-align: center;
+    color: #334155;
+}
+.player-placeholder .icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
+.player-placeholder p { font-size: 14px; }
+
+.player-container iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.player-toolbar {
+    display: flex;
+    gap: 8px;
+    padding: 8px 16px;
+    flex-shrink: 0;
+}
+.player-toolbar .btn { font-size: 12px; padding: 8px 14px; }
+
+.current-parser-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    padding: 0 16px 4px;
+    flex-shrink: 0;
+    display: none;
+}
+.current-parser-label.show { display: block; }
+
+/* ── Scrollbar ────────────────────────────── */
+.parser-grid::-webkit-scrollbar { width: 3px; }
+.parser-grid::-webkit-scrollbar-thumb { background: #334155; border-radius: 2px; }
+
+/* ── Desktop ──────────────────────────────── */
+@media (min-width: 768px) {
+    body {
+        max-width: 700px;
+        margin: 0 auto;
+    }
+    .parser-grid {
+        grid-template-columns: repeat(4, 1fr);
+        max-height: 240px;
+    }
+    .parser-btn { font-size: 13px; padding: 12px 8px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>VIP视频破解 Pro</h1>
+    <div class="subtitle">基于健康评分的智能解析器选择</div>
+</div>
+
+<div class="url-bar">
+    <input class="url-input" id="urlInput" type="url" placeholder="粘贴视频链接…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    <button class="btn btn-paste btn-outline" id="btnPaste" title="粘贴">📋</button>
+    <button class="btn btn-primary" id="btnGo">解析</button>
+</div>
+
+<div class="status-bar">
+    <div class="status-msg" id="statusMsg"></div>
+</div>
+
+<div class="parser-section">
+    <div class="parser-section-header">
+        <span class="parser-section-title">解析器</span>
+        <div class="auto-toggle" id="autoToggle">
+            <span>自动</span>
+            <div class="dot"></div>
+        </div>
+    </div>
+    <div class="parser-grid" id="parserGrid"></div>
+</div>
+
+<div class="current-parser-label" id="currentParserLabel"></div>
+
+<div class="player-container empty" id="playerContainer">
+    <div class="player-placeholder">
+        <div class="icon">🎬</div>
+        <p>粘贴视频链接开始解析</p>
+    </div>
+</div>
+
+<div class="player-toolbar">
+    <button class="btn btn-outline" id="btnRefresh" disabled>🔄 刷新</button>
+    <button class="btn btn-outline" id="btnNextParser" disabled>⏭ 换一个</button>
+    <button class="btn btn-outline" id="btnNewWindow" disabled>🔗 新窗口</button>
+</div>
+
+<script>
+;(function () {
+    'use strict';
+
+    // ── Parser List ──────────────────────────
+    var PARSERS = [
+        { name: '默认A',      url: 'https://json.fongmi.cc/web?url=' },
+        { name: '默认B',      url: 'https://super.playr.top/?url=' },
+        { name: 'CK解析',     url: 'https://www.ckplayer.vip/jiexi/?url=' },
+        { name: 'Player-JY',  url: 'https://jx.playerjy.com/?url=' },
+        { name: '虾米解析',   url: 'https://jx.xmflv.com/?url=' },
+        { name: '789解析',    url: 'https://jiexi.789jiexi.icu:4433/?url=' },
+        { name: 'HLS解析',    url: 'https://jx.hls.one/?url=' },
+        { name: '极速解析',   url: 'https://jx.2s0.cn/player/?url=' },
+        { name: '冰豆解析',   url: 'https://bd.jx.cn/?url=' },
+        { name: '剖元解析',   url: 'https://www.pouyun.com/?url=' },
+        { name: '973解析',    url: 'https://jx.973973.xyz/?url=' },
+        { name: '七哥解析',   url: 'https://jx.nnxv.cn/tv.php?url=' },
+        { name: 'playm3u8',   url: 'https://www.playm3u8.cn/jiexi.php?url=' },
+        { name: '937解析',    url: 'https://bfq.937auth.vip?url=' },
+        { name: '七七云解析', url: 'https://jx.77flv.cc/?url=' },
+        { name: '芒果TV1',    url: 'https://video.isyour.love/player/getplayer?url=' },
+        { name: 'M1907',      url: 'https://im1907.top/?jx=' },
+        { name: 'Yparse',     url: 'https://jx.yparse.com/index.php?url=' },
+    ];
+
+    // ── DOM refs ─────────────────────────────
+    var urlInput = document.getElementById('urlInput');
+    var btnGo = document.getElementById('btnGo');
+    var btnPaste = document.getElementById('btnPaste');
+    var btnRefresh = document.getElementById('btnRefresh');
+    var btnNext = document.getElementById('btnNextParser');
+    var btnNewWin = document.getElementById('btnNewWindow');
+    var parserGrid = document.getElementById('parserGrid');
+    var playerContainer = document.getElementById('playerContainer');
+    var statusMsg = document.getElementById('statusMsg');
+    var autoToggle = document.getElementById('autoToggle');
+    var currentParserLabel = document.getElementById('currentParserLabel');
+
+    // ── State ────────────────────────────────
+    var activeParserIdx = -1;
+    var activeVideoUrl = '';
+    var loadTimer = null;
+
+    // ══════════════════════════════════════════
+    // Health Manager (localStorage)
+    // ══════════════════════════════════════════
+
+    var Health = {
+        KEY: 'vvp_site_health',
+
+        load: function () {
+            try { return JSON.parse(localStorage.getItem(this.KEY) || '{}'); }
+            catch (e) { return {}; }
+        },
+
+        save: function (scores) {
+            localStorage.setItem(this.KEY, JSON.stringify(scores));
+        },
+
+        getSorted: function () {
+            var scores = this.load();
+            var list = PARSERS.map(function (p, i) { return { idx: i, name: p.name, url: p.url, score: (scores[p.url] && scores[p.url].score) || 100 }; });
+            list.sort(function (a, b) { return b.score - a.score; });
+            return list;
+        },
+
+        record: function (url, success) {
+            var scores = this.load();
+            var entry = scores[url] || { score: 100, success: 0, fail: 0 };
+            if (success) { entry.success += 1; entry.score = Math.min(1000, entry.score + 15); }
+            else         { entry.fail += 1;    entry.score = Math.max(0, entry.score - 25); }
+            scores[url] = entry;
+            this.save(scores);
+            renderParsers();
+        },
+    };
+
+    // ══════════════════════════════════════════
+    // UI Helpers
+    // ══════════════════════════════════════════
+
+    function el(tag, attrs) {
+        var e = document.createElement(tag);
+        if (attrs) {
+            Object.keys(attrs).forEach(function (k) {
+                if (k === 'class') e.className = attrs[k];
+                else if (k === 'style') { Object.keys(attrs[k]).forEach(function (p) { e.style[p] = attrs[k][p]; }); }
+                else e.setAttribute(k, attrs[k]);
+            });
+        }
+        for (var i = 2; i < arguments.length; i++) {
+            var arg = arguments[i];
+            if (!arg && arg !== 0) continue;
+            if (typeof arg === 'string' || typeof arg === 'number') e.appendChild(document.createTextNode(String(arg)));
+            else if (arg.nodeType) e.appendChild(arg);
+        }
+        return e;
+    }
+
+    function showStatus(text, type) {
+        statusMsg.textContent = text;
+        statusMsg.className = 'status-msg show ' + (type || 'info');
+        if (type !== 'error') {
+            clearTimeout(statusMsg._timer);
+            statusMsg._timer = setTimeout(function () { statusMsg.classList.remove('show'); }, 4000);
+        }
+    }
+
+    function setPlayerEmpty() {
+        while (playerContainer.firstChild) { playerContainer.removeChild(playerContainer.firstChild); }
+        playerContainer.classList.add('empty');
+        var placeholder = el('div', { class: 'player-placeholder' },
+            el('div', { class: 'icon' }, '🎬'),
+            el('p', {}, '粘贴视频链接开始解析')
+        );
+        playerContainer.appendChild(placeholder);
+        btnRefresh.disabled = true;
+        btnNext.disabled = true;
+        btnNewWin.disabled = true;
+        currentParserLabel.classList.remove('show');
+        activeParserIdx = -1;
+        if (loadTimer) { clearTimeout(loadTimer); loadTimer = null; }
+    }
+
+    // ══════════════════════════════════════════
+    // Parser Grid
+    // ══════════════════════════════════════════
+
+    function renderParsers() {
+        while (parserGrid.firstChild) { parserGrid.removeChild(parserGrid.firstChild); }
+        var sorted = Health.getSorted();
+
+        sorted.forEach(function (p) {
+            var scoreClass = p.score >= 80 ? 'high' : (p.score >= 40 ? 'mid' : 'low');
+            var scoreSpan = el('span', { class: 'parser-score ' + scoreClass }, String(p.score));
+
+            var btn = el('div', {
+                class: 'parser-btn' + (p.idx === activeParserIdx ? ' selected' : ''),
+                title: p.name,
+            }, p.name, scoreSpan);
+
+            btn.addEventListener('click', function () {
+                if (!activeVideoUrl) {
+                    showStatus('请先粘贴视频链接', 'error');
+                    return;
+                }
+                loadParser(p.idx);
+            });
+
+            parserGrid.appendChild(btn);
+        });
+    }
+
+    function updateSelectedParser(idx) {
+        activeParserIdx = idx;
+        var buttons = parserGrid.querySelectorAll('.parser-btn');
+        buttons.forEach(function (b, i) {
+            var sorted = Health.getSorted();
+            b.classList.toggle('selected', sorted[i] && sorted[i].idx === idx);
+        });
+    }
+
+    // ══════════════════════════════════════════
+    // Player
+    // ══════════════════════════════════════════
+
+    function loadParser(idx) {
+        if (!activeVideoUrl) return;
+
+        var sorted = Health.getSorted();
+        var parser = sorted[idx];
+        if (!parser) return;
+
+        // 如果当前已有 iframe 且不同解析器，更新
+        updateSelectedPanel(parser);
+        startIframe(parser);
+    }
+
+    function startIframe(parser) {
+        if (loadTimer) { clearTimeout(loadTimer); loadTimer = null; }
+
+        // 清空播放器
+        while (playerContainer.firstChild) { playerContainer.removeChild(playerContainer.firstChild); }
+        playerContainer.classList.remove('empty');
+
+        var iframe = el('iframe', {
+            src: parser.url + activeVideoUrl,
+            allow: 'autoplay; encrypted-media; fullscreen',
+            allowfullscreen: 'true',
+            referrerpolicy: 'no-referrer',
+        });
+
+        // 超时自动切换
+        loadTimer = setTimeout(function () {
+            Health.record(parser.url, false);
+            showStatus('「' + parser.name + '」加载超时，自动切换下一个…', 'error');
+            loadNextParser();
+        }, 12000);
+
+        iframe.addEventListener('load', function () {
+            clearTimeout(loadTimer);
+            loadTimer = null;
+            Health.record(parser.url, true);
+            showStatus('「' + parser.name + '」加载成功', 'success');
+        });
+
+        iframe.addEventListener('error', function () {
+            clearTimeout(loadTimer);
+            loadTimer = null;
+            Health.record(parser.url, false);
+            showStatus('「' + parser.name + '」加载失败', 'error');
+        });
+
+        playerContainer.appendChild(iframe);
+
+        btnRefresh.disabled = false;
+        btnNext.disabled = false;
+        btnNewWin.disabled = false;
+    }
+
+    function updateSelectedPanel(parser) {
+        activeParserIdx = parser.idx;
+        updateSelectedParser(parser.idx);
+        currentParserLabel.textContent = '当前：' + parser.name + ' (评分 ' + parser.score + ')';
+        currentParserLabel.classList.add('show');
+    }
+
+    function loadNextParser() {
+        var sorted = Health.getSorted();
+        var currentInSorted = -1;
+        for (var i = 0; i < sorted.length; i++) {
+            if (sorted[i].idx === activeParserIdx) { currentInSorted = i; break; }
+        }
+        var next = currentInSorted + 1;
+        if (next >= sorted.length) {
+            showStatus('所有解析器已尝试完毕，请检查链接或稍后再试', 'error');
+            return;
+        }
+        loadParser(next);
+    }
+
+    function loadBestParser() {
+        var sorted = Health.getSorted();
+        loadParser(0); // 最高评分
+    }
+
+    function refreshCurrent() {
+        if (activeParserIdx < 0 || !activeVideoUrl) return;
+        var sorted = Health.getSorted();
+        for (var i = 0; i < sorted.length; i++) {
+            if (sorted[i].idx === activeParserIdx) { loadParser(i); return; }
+        }
+    }
+
+    function openInNewWindow() {
+        if (activeParserIdx < 0 || !activeVideoUrl) return;
+        var sorted = Health.getSorted();
+        for (var i = 0; i < sorted.length; i++) {
+            if (sorted[i].idx === activeParserIdx) {
+                window.open(sorted[i].url + activeVideoUrl, '_blank');
+                return;
+            }
+        }
+    }
+
+    // ══════════════════════════════════════════
+    // Event Handlers
+    // ══════════════════════════════════════════
+
+    function handleGo() {
+        var url = urlInput.value.trim();
+        if (!url) {
+            showStatus('请输入视频链接', 'error');
+            return;
+        }
+        // 基本 URL 验证
+        if (!/^https?:\/\/.+/.test(url)) {
+            showStatus('请输入有效的视频链接 (http/https)', 'error');
+            return;
+        }
+
+        activeVideoUrl = url;
+        setPlayerEmpty();
+        currentParserLabel.classList.remove('show');
+
+        showStatus('已就绪，选择解析器或开启自动模式', 'info');
+        renderParsers();
+
+        // 自动模式
+        if (autoToggle.classList.contains('active')) {
+            setTimeout(loadBestParser, 300);
+        }
+    }
+
+    function handlePaste() {
+        if (navigator.clipboard && navigator.clipboard.readText) {
+            navigator.clipboard.readText().then(function (text) {
+                if (text) {
+                    urlInput.value = text.trim();
+                    handleGo();
+                }
+            }).catch(function () {
+                urlInput.focus();
+            });
+        } else {
+            urlInput.focus();
+            showStatus('请手动粘贴链接', 'info');
+        }
+    }
+
+    btnGo.addEventListener('click', handleGo);
+    btnPaste.addEventListener('click', handlePaste);
+    btnRefresh.addEventListener('click', refreshCurrent);
+    btnNext.addEventListener('click', loadNextParser);
+    btnNewWin.addEventListener('click', openInNewWindow);
+
+    urlInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); handleGo(); }
+    });
+
+    // 自动模式切换
+    autoToggle.addEventListener('click', function () {
+        this.classList.toggle('active');
+        var isAuto = this.classList.contains('active');
+        localStorage.setItem('vvp_auto_mode', isAuto ? '1' : '0');
+        if (isAuto && activeVideoUrl && activeParserIdx < 0) {
+            loadBestParser();
+        }
+    });
+
+    // ══════════════════════════════════════════
+    // Init
+    // ══════════════════════════════════════════
+
+    function init() {
+        renderParsers();
+
+        // 恢复自动模式
+        if (localStorage.getItem('vvp_auto_mode') === '1') {
+            autoToggle.classList.add('active');
+        }
+
+        // 尝试自动粘贴剪贴板
+        urlInput.focus();
+
+        // 如果通过 URL 参数传入
+        var params = new URLSearchParams(window.location.search);
+        var urlParam = params.get('url');
+        if (urlParam) {
+            urlInput.value = urlParam;
+            handleGo();
+        }
+    }
+
+    init();
+
+})();
+</script>
+</body>
+</html>
