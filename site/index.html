@@ -227,32 +227,23 @@ body {
         });
         chipsEl.appendChild(a);
 
-        // 当前解析器
+        // 当前源
         if (activeIdx >= 0) {
             var p = PARSERS[activeIdx];
             var c = document.createElement('span');
             c.className = 'chip on';
-            c.textContent = p.name;
+            c.textContent = '源 #' + (activeIdx + 1);
             c.addEventListener('click', function () { load({ idx: activeIdx, name: p.name, url: p.url, score: 100 }); });
             chipsEl.appendChild(c);
         }
 
-        // 换源
-        var t = document.createElement('span');
-        t.className = 'chip' + (expanded ? ' on' : '');
-        t.textContent = expanded ? '收起 ▲' : '换源 ▼';
-        t.addEventListener('click', function () { expanded = !expanded; renderChips(); renderMore(); });
-        chipsEl.appendChild(t);
-
-        // 新窗口
-        if (activeIdx >= 0) {
-            var w = document.createElement('span');
-            w.className = 'chip';
-            w.textContent = '新窗口 ↗';
-            w.addEventListener('click', function () {
-                window.open(PARSERS[activeIdx].url + activeUrl, '_blank');
-            });
-            chipsEl.appendChild(w);
+        // 换一个
+        if (activeUrl) {
+            var n = document.createElement('span');
+            n.className = 'chip';
+            n.textContent = '换一个';
+            n.addEventListener('click', function () { loadNext(); });
+            chipsEl.appendChild(n);
         }
     }
 
@@ -265,10 +256,7 @@ body {
         sorted.forEach(function (p) {
             var c = document.createElement('span');
             c.className = 'chip' + (p.idx === activeIdx ? ' on' : '');
-            var dot = document.createElement('span');
-            dot.className = 'dot' + (p.score >= 80 ? ' good' : '');
-            c.appendChild(dot);
-            c.appendChild(document.createTextNode(p.name));
+            c.textContent = '#' + (p.idx + 1);
             c.addEventListener('click', function () {
                 if (!activeUrl) { setStatus('请先粘贴链接', true); return; }
                 expanded = false;
