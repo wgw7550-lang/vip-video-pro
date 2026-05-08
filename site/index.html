@@ -182,7 +182,7 @@ body {
     var activeUrl = '';
     var activeIdx = -1;
     var timer = null;
-    var autoMode = false;
+    var autoMode = true;
     var nextUrl = '';
 
     // ── 下一集 URL 推算 ──────────────────
@@ -326,7 +326,7 @@ body {
             Health.record(parser.url, false);
             setStatus(parser.name + ' 超时，换下一个', true);
             loadNext();
-        }, 12000);
+        }, 8000);
 
         iframe.addEventListener('load', function () {
             clearTimeout(timer); timer = null;
@@ -375,7 +375,7 @@ body {
     });
 
     // ── Init ──────────────────────────────
-    if (localStorage.getItem('vhp_auto') === '1') autoMode = true;
+    if (localStorage.getItem('vhp_auto') === '0') autoMode = false;
     renderChips();
     renderMore();
     urlEl.focus();
