@@ -147,6 +147,7 @@ body {
 </div>
 
 <div class="chips" id="chips"></div>
+<div class="chips" id="moreChips" style="display:none"></div>
 <div class="status" id="status">粘贴链接，点击解析</div>
 <div class="player" id="player"><p>造福人类</p></div>
 
@@ -178,6 +179,7 @@ body {
     var urlEl = document.getElementById('url');
     var goEl = document.getElementById('go');
     var chipsEl = document.getElementById('chips');
+    var moreEl = document.getElementById('moreChips');
     var statusEl = document.getElementById('status');
     var playerEl = document.getElementById('player');
 
@@ -185,6 +187,7 @@ body {
     var activeIdx = -1;
     var timer = null;
     var autoMode = false;
+    var expanded = false;
 
     // ── Health ────────────────────────────
     var Health = {
@@ -204,6 +207,7 @@ body {
             s[url] = e;
             this.save(s);
             renderChips();
+            renderMore();
         },
     };
 
@@ -211,19 +215,52 @@ body {
     function renderChips() {
         while (chipsEl.firstChild) chipsEl.removeChild(chipsEl.firstChild);
 
-        // Auto toggle chip
-        var autoChip = document.createElement('span');
-        autoChip.className = 'chip' + (autoMode ? ' on' : '');
-        autoChip.textContent = '自动';
-        autoChip.addEventListener('click', function () {
+        // 自动
+        var a = document.createElement('span');
+        a.className = 'chip' + (autoMode ? ' on' : '');
+        a.textContent = '自动';
+        a.addEventListener('click', function () {
             autoMode = !autoMode;
             localStorage.setItem('vhp_auto', autoMode ? '1' : '0');
-            if (autoMode && activeUrl && activeIdx < 0) loadBest();
+            if (autoMode && activeUrl) loadBest();
             renderChips();
         });
-        chipsEl.appendChild(autoChip);
+        chipsEl.appendChild(a);
 
-        // Parser chips
+        // 当前解析器
+        if (activeIdx >= 0) {
+            var p = PARSERS[activeIdx];
+            var c = document.createElement('span');
+            c.className = 'chip on';
+            c.textContent = p.name;
+            c.addEventListener('click', function () { load({ idx: activeIdx, name: p.name, url: p.url, score: 100 }); });
+            chipsEl.appendChild(c);
+        }
+
+        // 换源
+        var t = document.createElement('span');
+        t.className = 'chip' + (expanded ? ' on' : '');
+        t.textContent = expanded ? '收起 ▲' : '换源 ▼';
+        t.addEventListener('click', function () { expanded = !expanded; renderChips(); renderMore(); });
+        chipsEl.appendChild(t);
+
+        // 新窗口
+        if (activeIdx >= 0) {
+            var w = document.createElement('span');
+            w.className = 'chip';
+            w.textContent = '新窗口 ↗';
+            w.addEventListener('click', function () {
+                window.open(PARSERS[activeIdx].url + activeUrl, '_blank');
+            });
+            chipsEl.appendChild(w);
+        }
+    }
+
+    function renderMore() {
+        while (moreEl.firstChild) moreEl.removeChild(moreEl.firstChild);
+        if (!expanded) { moreEl.style.display = 'none'; return; }
+        moreEl.style.display = 'flex';
+
         var sorted = Health.getSorted();
         sorted.forEach(function (p) {
             var c = document.createElement('span');
@@ -234,9 +271,12 @@ body {
             c.appendChild(document.createTextNode(p.name));
             c.addEventListener('click', function () {
                 if (!activeUrl) { setStatus('请先粘贴链接', true); return; }
+                expanded = false;
                 load(p);
+                renderChips();
+                renderMore();
             });
-            chipsEl.appendChild(c);
+            moreEl.appendChild(c);
         });
     }
 
@@ -319,6 +359,7 @@ body {
     // ── Init ──────────────────────────────
     if (localStorage.getItem('vhp_auto') === '1') autoMode = true;
     renderChips();
+    renderMore();
     urlEl.focus();
 
     var p = new URLSearchParams(window.location.search).get('url');
