@@ -5,234 +5,115 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>VIP视频破解 Pro</title>
+<title>造福人类</title>
 <style>
-/* ── Design Tokens ────────────────────────── */
-:root {
-    --bg-primary: #0b1120;
-    --bg-secondary: #111827;
-    --bg-tertiary: #1e293b;
-    --text-primary: #e2e8f0;
-    --text-secondary: #94a3b8;
-    --accent: #7c3aed;
-    --accent-hover: #8b5cf6;
-    --success: #16a34a;
-    --danger: #dc2626;
-    --warning: #f59e0b;
-    --border: #1e293b;
-    --radius: 14px;
-    --safe-bottom: env(safe-area-inset-bottom, 12px);
-    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
-}
-
-/* ── Reset ────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; overflow: hidden; }
 body {
-    font-family: var(--font);
-    background: var(--bg-primary);
-    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
+    background: #0a0a0a;
+    color: #ccc;
     display: flex;
     flex-direction: column;
     height: 100dvh;
     -webkit-tap-highlight-color: transparent;
 }
 
-/* ── Header ───────────────────────────────── */
-.header {
-    padding: 14px 16px;
-    background: var(--bg-secondary);
-    border-bottom: 1px solid var(--border);
-    text-align: center;
-    flex-shrink: 0;
-}
-.header h1 {
-    font-size: 17px;
-    font-weight: 700;
-    letter-spacing: -0.3px;
-    background: linear-gradient(135deg, #a78bfa, #7c3aed, #f59e0b);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-.header .subtitle {
-    font-size: 11px;
-    color: var(--text-secondary);
-    margin-top: 2px;
-}
-
-/* ── URL Input ────────────────────────────── */
-.url-bar {
-    padding: 12px 16px;
+/* ── Top Bar ──────────────────────────── */
+.top {
     display: flex;
     gap: 8px;
+    padding: 12px 12px 8px;
     flex-shrink: 0;
+    align-items: center;
 }
-.url-input {
+.top input {
     flex: 1;
-    padding: 11px 14px;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    background: var(--bg-secondary);
-    color: var(--text-primary);
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #222;
+    background: #111;
+    color: #ddd;
     font-size: 14px;
-    font-family: var(--font);
     outline: none;
-    transition: border-color 0.2s;
     min-width: 0;
 }
-.url-input:focus { border-color: var(--accent); }
-.url-input::placeholder { color: #475569; }
-
-.btn {
-    padding: 11px 18px;
-    border-radius: 12px;
-    border: none;
-    font-size: 14px;
-    font-weight: 600;
+.top input:focus { border-color: #555; }
+.top input::placeholder { color: #444; }
+.top button {
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: 1px solid #333;
+    background: #1a1a1a;
+    color: #aaa;
+    font-size: 13px;
     cursor: pointer;
     white-space: nowrap;
+    font-family: inherit;
     transition: all 0.15s;
-    font-family: var(--font);
 }
-.btn:active { transform: scale(0.96); }
-.btn-primary { background: var(--accent); color: #fff; }
-.btn-primary:hover { background: var(--accent-hover); }
-.btn-outline {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text-secondary);
-}
-.btn-outline:hover { border-color: #475569; color: var(--text-primary); }
-.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.top button:active { background: #333; color: #fff; }
+.top button.go { background: #2563eb; border-color: #3b82f6; color: #fff; }
+.top button.go:active { background: #1d4ed8; }
 
-.btn-paste {
-    padding: 11px 14px;
-    font-size: 16px;
-}
-
-/* ── Status ───────────────────────────────── */
-.status-bar {
-    padding: 0 16px;
-    flex-shrink: 0;
-}
-.status-msg {
-    font-size: 12px;
-    padding: 6px 12px;
-    border-radius: 8px;
-    display: none;
-}
-.status-msg.show { display: block; }
-.status-msg.info { background: rgba(59,130,246,0.15); color: #93c5fd; }
-.status-msg.error { background: rgba(220,38,38,0.15); color: #fca5a5; }
-.status-msg.success { background: rgba(22,163,74,0.15); color: #86efac; }
-
-/* ── Parser Grid ──────────────────────────── */
-.parser-section {
-    padding: 10px 16px;
-    flex-shrink: 0;
-}
-.parser-section-header {
+/* ── Chips ────────────────────────────── */
+.chips {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-}
-.parser-section-title {
-    font-size: 12px;
-    color: var(--text-secondary);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-.auto-toggle {
-    display: flex;
-    align-items: center;
     gap: 6px;
+    padding: 4px 12px 8px;
+    overflow-x: auto;
+    flex-shrink: 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+.chips::-webkit-scrollbar { display: none; }
+.chip {
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #161616;
+    border: 1px solid #222;
     font-size: 12px;
-    color: var(--text-secondary);
+    color: #999;
     cursor: pointer;
-    user-select: none;
-}
-.auto-toggle .dot {
-    width: 36px; height: 20px;
-    border-radius: 10px;
-    background: var(--bg-tertiary);
-    position: relative;
-    transition: background 0.2s;
-}
-.auto-toggle .dot::after {
-    content: '';
-    position: absolute;
-    top: 2px; left: 2px;
-    width: 16px; height: 16px;
-    border-radius: 50%;
-    background: #64748b;
-    transition: all 0.2s;
-}
-.auto-toggle.active .dot { background: var(--success); }
-.auto-toggle.active .dot::after { left: 18px; background: #fff; }
-
-.parser-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 7px;
-    max-height: 200px;
-    overflow-y: auto;
-    padding: 2px 0;
-}
-.parser-btn {
-    padding: 10px 6px;
-    text-align: center;
-    font-size: 12px;
-    color: #cbd5e1;
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
     transition: all 0.15s;
     user-select: none;
-    -webkit-tap-highlight-color: transparent;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 2px;
+    gap: 5px;
 }
-.parser-btn:active { background: #334155; border-color: #6366f1; }
-.parser-btn.selected { background: #1e1b4b; border-color: #818cf8; color: #e0e7ff; }
-.parser-btn .parser-score {
-    font-size: 10px;
-    padding: 1px 6px;
-    border-radius: 6px;
-}
-.parser-btn .parser-score.high { color: #86efac; }
-.parser-btn .parser-score.mid { color: #fcd34d; }
-.parser-btn .parser-score.low { color: #fca5a5; }
+.chip:active { background: #222; }
+.chip.on { background: #1a2a1a; border-color: #166534; color: #86efac; }
+.chip .dot { width: 5px; height: 5px; border-radius: 50%; background: #333; flex-shrink: 0; }
+.chip .dot.good { background: #22c55e; }
 
-/* ── Player Area ──────────────────────────── */
-.player-container {
-    flex: 1;
-    margin: 8px 16px;
-    border-radius: var(--radius);
-    overflow: hidden;
-    background: #000;
-    position: relative;
-    min-height: 200px;
-    border: 1px solid var(--border);
+/* ── Status ───────────────────────────── */
+.status {
+    padding: 0 12px;
+    font-size: 11px;
+    color: #555;
+    flex-shrink: 0;
+    min-height: 18px;
+    transition: color 0.3s;
 }
-.player-container.empty {
+.status.err { color: #f87171; }
+
+/* ── Player ───────────────────────────── */
+.player {
+    flex: 1;
+    margin: 6px 12px 12px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #111;
+    position: relative;
+    min-height: 160px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.player-placeholder {
-    text-align: center;
-    color: #334155;
-}
-.player-placeholder .icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
-.player-placeholder p { font-size: 14px; }
-
-.player-container iframe {
+.player p { color: #222; font-size: 14px; }
+.player iframe {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -240,89 +121,27 @@ body {
     border: none;
 }
 
-.player-toolbar {
-    display: flex;
-    gap: 8px;
-    padding: 8px 16px;
-    flex-shrink: 0;
-}
-.player-toolbar .btn { font-size: 12px; padding: 8px 14px; }
-
-.current-parser-label {
-    font-size: 11px;
-    color: var(--text-secondary);
-    padding: 0 16px 4px;
-    flex-shrink: 0;
-    display: none;
-}
-.current-parser-label.show { display: block; }
-
-/* ── Scrollbar ────────────────────────────── */
-.parser-grid::-webkit-scrollbar { width: 3px; }
-.parser-grid::-webkit-scrollbar-thumb { background: #334155; border-radius: 2px; }
-
-/* ── Desktop ──────────────────────────────── */
+/* ── Desktop ──────────────────────────── */
 @media (min-width: 768px) {
-    body {
-        max-width: 700px;
-        margin: 0 auto;
-    }
-    .parser-grid {
-        grid-template-columns: repeat(4, 1fr);
-        max-height: 240px;
-    }
-    .parser-btn { font-size: 13px; padding: 12px 8px; }
+    body { max-width: 700px; margin: 0 auto; }
 }
 </style>
 </head>
 <body>
 
-<div class="header">
-    <h1>VIP视频破解 Pro</h1>
-    <div class="subtitle">基于健康评分的智能解析器选择</div>
+<div class="top">
+    <input id="url" type="url" placeholder="粘贴视频链接…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    <button class="go" id="go">解析</button>
 </div>
 
-<div class="url-bar">
-    <input class="url-input" id="urlInput" type="url" placeholder="粘贴视频链接…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-    <button class="btn btn-paste btn-outline" id="btnPaste" title="粘贴">📋</button>
-    <button class="btn btn-primary" id="btnGo">解析</button>
-</div>
-
-<div class="status-bar">
-    <div class="status-msg" id="statusMsg"></div>
-</div>
-
-<div class="parser-section">
-    <div class="parser-section-header">
-        <span class="parser-section-title">解析器</span>
-        <div class="auto-toggle" id="autoToggle">
-            <span>自动</span>
-            <div class="dot"></div>
-        </div>
-    </div>
-    <div class="parser-grid" id="parserGrid"></div>
-</div>
-
-<div class="current-parser-label" id="currentParserLabel"></div>
-
-<div class="player-container empty" id="playerContainer">
-    <div class="player-placeholder">
-        <div class="icon">🎬</div>
-        <p>粘贴视频链接开始解析</p>
-    </div>
-</div>
-
-<div class="player-toolbar">
-    <button class="btn btn-outline" id="btnRefresh" disabled>🔄 刷新</button>
-    <button class="btn btn-outline" id="btnNextParser" disabled>⏭ 换一个</button>
-    <button class="btn btn-outline" id="btnNewWindow" disabled>🔗 新窗口</button>
-</div>
+<div class="chips" id="chips"></div>
+<div class="status" id="status">粘贴链接，点击解析</div>
+<div class="player" id="player"><p>造福人类</p></div>
 
 <script>
 ;(function () {
     'use strict';
 
-    // ── Parser List ──────────────────────────
     var PARSERS = [
         { name: '默认A',      url: 'https://json.fongmi.cc/web?url=' },
         { name: '默认B',      url: 'https://super.playr.top/?url=' },
@@ -344,337 +163,154 @@ body {
         { name: 'Yparse',     url: 'https://jx.yparse.com/index.php?url=' },
     ];
 
-    // ── DOM refs ─────────────────────────────
-    var urlInput = document.getElementById('urlInput');
-    var btnGo = document.getElementById('btnGo');
-    var btnPaste = document.getElementById('btnPaste');
-    var btnRefresh = document.getElementById('btnRefresh');
-    var btnNext = document.getElementById('btnNextParser');
-    var btnNewWin = document.getElementById('btnNewWindow');
-    var parserGrid = document.getElementById('parserGrid');
-    var playerContainer = document.getElementById('playerContainer');
-    var statusMsg = document.getElementById('statusMsg');
-    var autoToggle = document.getElementById('autoToggle');
-    var currentParserLabel = document.getElementById('currentParserLabel');
+    var urlEl = document.getElementById('url');
+    var goEl = document.getElementById('go');
+    var chipsEl = document.getElementById('chips');
+    var statusEl = document.getElementById('status');
+    var playerEl = document.getElementById('player');
 
-    // ── State ────────────────────────────────
-    var activeParserIdx = -1;
-    var activeVideoUrl = '';
-    var loadTimer = null;
+    var activeUrl = '';
+    var activeIdx = -1;
+    var timer = null;
+    var autoMode = false;
 
-    // ══════════════════════════════════════════
-    // Health Manager (localStorage)
-    // ══════════════════════════════════════════
-
+    // ── Health ────────────────────────────
     var Health = {
-        KEY: 'vvp_site_health',
-
-        load: function () {
-            try { return JSON.parse(localStorage.getItem(this.KEY) || '{}'); }
-            catch (e) { return {}; }
-        },
-
-        save: function (scores) {
-            localStorage.setItem(this.KEY, JSON.stringify(scores));
-        },
-
+        KEY: 'vhp',
+        load: function () { try { return JSON.parse(localStorage.getItem(this.KEY) || '{}'); } catch (e) { return {}; } },
+        save: function (s) { localStorage.setItem(this.KEY, JSON.stringify(s)); },
         getSorted: function () {
-            var scores = this.load();
-            var list = PARSERS.map(function (p, i) { return { idx: i, name: p.name, url: p.url, score: (scores[p.url] && scores[p.url].score) || 100 }; });
-            list.sort(function (a, b) { return b.score - a.score; });
-            return list;
+            var s = this.load();
+            return PARSERS.map(function (p, i) { return { idx: i, name: p.name, url: p.url, score: (s[p.url] && s[p.url].score) || 100 }; })
+                .sort(function (a, b) { return b.score - a.score; });
         },
-
-        record: function (url, success) {
-            var scores = this.load();
-            var entry = scores[url] || { score: 100, success: 0, fail: 0 };
-            if (success) { entry.success += 1; entry.score = Math.min(1000, entry.score + 15); }
-            else         { entry.fail += 1;    entry.score = Math.max(0, entry.score - 25); }
-            scores[url] = entry;
-            this.save(scores);
-            renderParsers();
+        record: function (url, ok) {
+            var s = this.load();
+            var e = s[url] || { score: 100, ok: 0, no: 0 };
+            if (ok) { e.ok += 1; e.score = Math.min(1000, e.score + 15); }
+            else    { e.no += 1; e.score = Math.max(0, e.score - 25); }
+            s[url] = e;
+            this.save(s);
+            renderChips();
         },
     };
 
-    // ══════════════════════════════════════════
-    // UI Helpers
-    // ══════════════════════════════════════════
+    // ── Render ────────────────────────────
+    function renderChips() {
+        while (chipsEl.firstChild) chipsEl.removeChild(chipsEl.firstChild);
 
-    function el(tag, attrs) {
-        var e = document.createElement(tag);
-        if (attrs) {
-            Object.keys(attrs).forEach(function (k) {
-                if (k === 'class') e.className = attrs[k];
-                else if (k === 'style') { Object.keys(attrs[k]).forEach(function (p) { e.style[p] = attrs[k][p]; }); }
-                else e.setAttribute(k, attrs[k]);
-            });
-        }
-        for (var i = 2; i < arguments.length; i++) {
-            var arg = arguments[i];
-            if (!arg && arg !== 0) continue;
-            if (typeof arg === 'string' || typeof arg === 'number') e.appendChild(document.createTextNode(String(arg)));
-            else if (arg.nodeType) e.appendChild(arg);
-        }
-        return e;
-    }
+        // Auto toggle chip
+        var autoChip = document.createElement('span');
+        autoChip.className = 'chip' + (autoMode ? ' on' : '');
+        autoChip.textContent = '自动';
+        autoChip.addEventListener('click', function () {
+            autoMode = !autoMode;
+            localStorage.setItem('vhp_auto', autoMode ? '1' : '0');
+            if (autoMode && activeUrl && activeIdx < 0) loadBest();
+            renderChips();
+        });
+        chipsEl.appendChild(autoChip);
 
-    function showStatus(text, type) {
-        statusMsg.textContent = text;
-        statusMsg.className = 'status-msg show ' + (type || 'info');
-        if (type !== 'error') {
-            clearTimeout(statusMsg._timer);
-            statusMsg._timer = setTimeout(function () { statusMsg.classList.remove('show'); }, 4000);
-        }
-    }
-
-    function setPlayerEmpty() {
-        while (playerContainer.firstChild) { playerContainer.removeChild(playerContainer.firstChild); }
-        playerContainer.classList.add('empty');
-        var placeholder = el('div', { class: 'player-placeholder' },
-            el('div', { class: 'icon' }, '🎬'),
-            el('p', {}, '粘贴视频链接开始解析')
-        );
-        playerContainer.appendChild(placeholder);
-        btnRefresh.disabled = true;
-        btnNext.disabled = true;
-        btnNewWin.disabled = true;
-        currentParserLabel.classList.remove('show');
-        activeParserIdx = -1;
-        if (loadTimer) { clearTimeout(loadTimer); loadTimer = null; }
-    }
-
-    // ══════════════════════════════════════════
-    // Parser Grid
-    // ══════════════════════════════════════════
-
-    function renderParsers() {
-        while (parserGrid.firstChild) { parserGrid.removeChild(parserGrid.firstChild); }
+        // Parser chips
         var sorted = Health.getSorted();
-
         sorted.forEach(function (p) {
-            var scoreClass = p.score >= 80 ? 'high' : (p.score >= 40 ? 'mid' : 'low');
-            var scoreSpan = el('span', { class: 'parser-score ' + scoreClass }, String(p.score));
-
-            var btn = el('div', {
-                class: 'parser-btn' + (p.idx === activeParserIdx ? ' selected' : ''),
-                title: p.name,
-            }, p.name, scoreSpan);
-
-            btn.addEventListener('click', function () {
-                if (!activeVideoUrl) {
-                    showStatus('请先粘贴视频链接', 'error');
-                    return;
-                }
-                loadParser(p.idx);
+            var c = document.createElement('span');
+            c.className = 'chip' + (p.idx === activeIdx ? ' on' : '');
+            var dot = document.createElement('span');
+            dot.className = 'dot' + (p.score >= 80 ? ' good' : '');
+            c.appendChild(dot);
+            c.appendChild(document.createTextNode(p.name));
+            c.addEventListener('click', function () {
+                if (!activeUrl) { setStatus('请先粘贴链接', true); return; }
+                load(p);
             });
-
-            parserGrid.appendChild(btn);
+            chipsEl.appendChild(c);
         });
     }
 
-    function updateSelectedParser(idx) {
-        activeParserIdx = idx;
-        var buttons = parserGrid.querySelectorAll('.parser-btn');
-        buttons.forEach(function (b, i) {
-            var sorted = Health.getSorted();
-            b.classList.toggle('selected', sorted[i] && sorted[i].idx === idx);
-        });
+    function setStatus(text, isErr) {
+        statusEl.textContent = text;
+        statusEl.className = 'status' + (isErr ? ' err' : '');
     }
 
-    // ══════════════════════════════════════════
-    // Player
-    // ══════════════════════════════════════════
-
-    function loadParser(idx) {
-        if (!activeVideoUrl) return;
-
-        var sorted = Health.getSorted();
-        var parser = sorted[idx];
-        if (!parser) return;
-
-        // 如果当前已有 iframe 且不同解析器，更新
-        updateSelectedPanel(parser);
-        startIframe(parser);
+    function resetPlayer() {
+        while (playerEl.firstChild) playerEl.removeChild(playerEl.firstChild);
+        var p = document.createElement('p');
+        p.textContent = '造福人类';
+        playerEl.appendChild(p);
+        activeIdx = -1;
+        if (timer) { clearTimeout(timer); timer = null; }
     }
 
-    function startIframe(parser) {
-        if (loadTimer) { clearTimeout(loadTimer); loadTimer = null; }
+    // ── Player ────────────────────────────
+    function load(parser) {
+        if (timer) { clearTimeout(timer); timer = null; }
+        while (playerEl.firstChild) playerEl.removeChild(playerEl.firstChild);
 
-        // 清空播放器
-        while (playerContainer.firstChild) { playerContainer.removeChild(playerContainer.firstChild); }
-        playerContainer.classList.remove('empty');
+        var iframe = document.createElement('iframe');
+        iframe.src = parser.url + activeUrl;
+        iframe.allow = 'autoplay; encrypted-media; fullscreen';
+        iframe.allowFullscreen = true;
+        iframe.referrerPolicy = 'no-referrer';
 
-        var iframe = el('iframe', {
-            src: parser.url + activeVideoUrl,
-            allow: 'autoplay; encrypted-media; fullscreen',
-            allowfullscreen: 'true',
-            referrerpolicy: 'no-referrer',
-        });
-
-        // 超时自动切换
-        loadTimer = setTimeout(function () {
+        timer = setTimeout(function () {
             Health.record(parser.url, false);
-            showStatus('「' + parser.name + '」加载超时，自动切换下一个…', 'error');
-            loadNextParser();
+            setStatus(parser.name + ' 超时，换下一个', true);
+            loadNext();
         }, 12000);
 
         iframe.addEventListener('load', function () {
-            clearTimeout(loadTimer);
-            loadTimer = null;
+            clearTimeout(timer); timer = null;
             Health.record(parser.url, true);
-            showStatus('「' + parser.name + '」加载成功', 'success');
+            setStatus(parser.name, false);
         });
-
         iframe.addEventListener('error', function () {
-            clearTimeout(loadTimer);
-            loadTimer = null;
+            clearTimeout(timer); timer = null;
             Health.record(parser.url, false);
-            showStatus('「' + parser.name + '」加载失败', 'error');
+            setStatus(parser.name + ' 失败', true);
         });
 
-        playerContainer.appendChild(iframe);
-
-        btnRefresh.disabled = false;
-        btnNext.disabled = false;
-        btnNewWin.disabled = false;
+        playerEl.appendChild(iframe);
+        activeIdx = parser.idx;
+        renderChips();
     }
 
-    function updateSelectedPanel(parser) {
-        activeParserIdx = parser.idx;
-        updateSelectedParser(parser.idx);
-        currentParserLabel.textContent = '当前：' + parser.name + ' (评分 ' + parser.score + ')';
-        currentParserLabel.classList.add('show');
-    }
-
-    function loadNextParser() {
+    function loadBest() {
         var sorted = Health.getSorted();
-        var currentInSorted = -1;
-        for (var i = 0; i < sorted.length; i++) {
-            if (sorted[i].idx === activeParserIdx) { currentInSorted = i; break; }
-        }
-        var next = currentInSorted + 1;
-        if (next >= sorted.length) {
-            showStatus('所有解析器已尝试完毕，请检查链接或稍后再试', 'error');
-            return;
-        }
-        loadParser(next);
+        load(sorted[0]);
     }
 
-    function loadBestParser() {
+    function loadNext() {
         var sorted = Health.getSorted();
-        loadParser(0); // 最高评分
+        var pos = -1;
+        for (var i = 0; i < sorted.length; i++) { if (sorted[i].idx === activeIdx) { pos = i; break; } }
+        if (pos + 1 < sorted.length) load(sorted[pos + 1]);
+        else setStatus('所有解析器已尝试', true);
     }
 
-    function refreshCurrent() {
-        if (activeParserIdx < 0 || !activeVideoUrl) return;
-        var sorted = Health.getSorted();
-        for (var i = 0; i < sorted.length; i++) {
-            if (sorted[i].idx === activeParserIdx) { loadParser(i); return; }
-        }
-    }
-
-    function openInNewWindow() {
-        if (activeParserIdx < 0 || !activeVideoUrl) return;
-        var sorted = Health.getSorted();
-        for (var i = 0; i < sorted.length; i++) {
-            if (sorted[i].idx === activeParserIdx) {
-                window.open(sorted[i].url + activeVideoUrl, '_blank');
-                return;
-            }
-        }
-    }
-
-    // ══════════════════════════════════════════
-    // Event Handlers
-    // ══════════════════════════════════════════
-
-    function handleGo() {
-        var url = urlInput.value.trim();
-        if (!url) {
-            showStatus('请输入视频链接', 'error');
-            return;
-        }
-        // 基本 URL 验证
-        if (!/^https?:\/\/.+/.test(url)) {
-            showStatus('请输入有效的视频链接 (http/https)', 'error');
-            return;
-        }
-
-        activeVideoUrl = url;
-        setPlayerEmpty();
-        currentParserLabel.classList.remove('show');
-
-        showStatus('已就绪，选择解析器或开启自动模式', 'info');
-        renderParsers();
-
-        // 自动模式
-        if (autoToggle.classList.contains('active')) {
-            setTimeout(loadBestParser, 300);
-        }
-    }
-
-    function handlePaste() {
-        if (navigator.clipboard && navigator.clipboard.readText) {
-            navigator.clipboard.readText().then(function (text) {
-                if (text) {
-                    urlInput.value = text.trim();
-                    handleGo();
-                }
-            }).catch(function () {
-                urlInput.focus();
-            });
-        } else {
-            urlInput.focus();
-            showStatus('请手动粘贴链接', 'info');
-        }
-    }
-
-    btnGo.addEventListener('click', handleGo);
-    btnPaste.addEventListener('click', handlePaste);
-    btnRefresh.addEventListener('click', refreshCurrent);
-    btnNext.addEventListener('click', loadNextParser);
-    btnNewWin.addEventListener('click', openInNewWindow);
-
-    urlInput.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') { e.preventDefault(); handleGo(); }
+    // ── Events ────────────────────────────
+    goEl.addEventListener('click', function () {
+        var u = urlEl.value.trim();
+        if (!u) { setStatus('请输入链接', true); return; }
+        if (!/^https?:\/\/.+/.test(u)) { setStatus('链接格式不对', true); return; }
+        activeUrl = u;
+        resetPlayer();
+        renderChips();
+        setStatus('选择解析器', false);
+        if (autoMode) setTimeout(loadBest, 300);
     });
 
-    // 自动模式切换
-    autoToggle.addEventListener('click', function () {
-        this.classList.toggle('active');
-        var isAuto = this.classList.contains('active');
-        localStorage.setItem('vvp_auto_mode', isAuto ? '1' : '0');
-        if (isAuto && activeVideoUrl && activeParserIdx < 0) {
-            loadBestParser();
-        }
+    urlEl.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); goEl.click(); }
     });
 
-    // ══════════════════════════════════════════
-    // Init
-    // ══════════════════════════════════════════
+    // ── Init ──────────────────────────────
+    if (localStorage.getItem('vhp_auto') === '1') autoMode = true;
+    renderChips();
+    urlEl.focus();
 
-    function init() {
-        renderParsers();
-
-        // 恢复自动模式
-        if (localStorage.getItem('vvp_auto_mode') === '1') {
-            autoToggle.classList.add('active');
-        }
-
-        // 尝试自动粘贴剪贴板
-        urlInput.focus();
-
-        // 如果通过 URL 参数传入
-        var params = new URLSearchParams(window.location.search);
-        var urlParam = params.get('url');
-        if (urlParam) {
-            urlInput.value = urlParam;
-            handleGo();
-        }
-    }
-
-    init();
-
+    var p = new URLSearchParams(window.location.search).get('url');
+    if (p) { urlEl.value = p; goEl.click(); }
 })();
 </script>
 </body>
