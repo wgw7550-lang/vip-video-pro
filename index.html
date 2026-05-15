@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>造福人类，回馈于社会</title>
+<link rel="apple-touch-icon" href="http://ww1.sinaimg.cn/large/6a155794ly1fubb8dy4pzj205k05kdg3.jpg">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="manifest" href="data:application/json,{}">
+<title>VIP视频解析</title>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; overflow: hidden; }
@@ -158,6 +161,18 @@ body {
     var SELF_URL = '';
     var PARSERS = [
         { name: '自建',       url: '__SELF__' },
+        { name: '虾米',       url: 'https://jx.xmflv.com/?url=' },
+        { name: '冰豆',       url: 'https://bd.jx.cn/?url=' },
+        { name: 'M3U8',       url: 'https://jx.m3u8.tv/jiexi/?url=' },
+        { name: '七七云',     url: 'https://jx.77flv.cc/?url=' },
+        { name: 'Wandhi',     url: 'https://jx.wandhi.com?u=' },
+        { name: 'playm3u8',   url: 'https://www.playm3u8.cn/jiexi.php?url=' },
+        { name: '虾米CC',     url: 'https://jx.xmflv.cc/?url=' },
+        { name: 'XYMP4',      url: 'https://jx.xymp4.cc/?url=' },
+        { name: '8090G',      url: 'https://www.8090g.cn/jiexi/?url=' },
+        { name: '盘古',       url: 'https://www.pangujiexi.com/jiexi/?url=' },
+        { name: 'Yparse2',    url: 'https://yparse.ik9.cc/index.php?url=' },
+        { name: 'JSON',       url: 'https://json.fongmi.cc/web?url=' },
     ];
 
     var urlEl = document.getElementById('url');
